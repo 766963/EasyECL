@@ -5,10 +5,12 @@
 |  __|/ _` / __| | | |  __|| |    | |
 | |__| (_| \__ \ |_| | |___| \__/\| |____
 \____/\__,_|___/\__, \____/ \____/\_____/
-                 __/ |               v1.3
+                 __/ |               v1.4
                 |___/
 
 Victor Persson <root@ssh.nu>
+
+v1.4: Added hotkey (CTRL+ALT+L) to lock + unmount.
 
 v1.3: Added LockWorkstation button to quickly lock & unmount.
 
@@ -26,7 +28,9 @@ v1.0: initial release
 #include <GuiConstantsEx.au3>
 #include <File.au3>
 
-$VERSION="1.3"
+HotKeySet("^!l", "LockWorkstation")
+
+$VERSION="1.4"
 $CONTAINERLOCATION="C:\container.vhd"
 
 $hGUI = GuiCreate("EasyECL", 250, 60)
@@ -78,6 +82,11 @@ Func Unmount()
    ProcessClose($PID)
 EndFunc
 
+Func LockWorkstation()
+   Unmount()
+   Run( "rundll32.exe user32.dll LockWorkStation" )
+EndFunc
+
 While 1
    $MSG = GUIGetMsg()
 
@@ -92,8 +101,7 @@ Case $MSG = $UNMOUNT
    Unmount()
 
 Case $MSG = $LOCK
-   Unmount()
-   Run( "rundll32.exe user32.dll LockWorkStation" )
+   LockWorkstation()
 
 EndSelect
 
